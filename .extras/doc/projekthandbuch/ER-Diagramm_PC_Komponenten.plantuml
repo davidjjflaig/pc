@@ -1,0 +1,36 @@
+@startuml ER-Diagramm PC Komponenten
+
+hide circle
+skinparam linetype ortho
+
+entity "Hersteller" {
+  * id: integer <<generated>>
+  --
+  * name: text
+  * gruendungsjahr: integer
+}
+
+entity "Komponente" {
+  * id: integer <<generated>>
+  --
+  * name: text
+  * typ: text
+  * preis: number
+  * **hersteller_id**: integer <<FK>>
+}
+
+entity "Spezifikation" {
+  * id: integer <<generated>>
+  --
+  * kerntakt_mhz: integer
+  * speicher_gb: integer
+  * **komponente_id**: integer <<FK>>
+}
+
+Hersteller }o--|| Komponente
+Komponente ||--|| Spezifikation
+
+
+footer David Flaig
+
+@enduml

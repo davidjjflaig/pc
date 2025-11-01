@@ -1,0 +1,122 @@
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"Funktionen, um PC-Komponenten-Daten zu lesen"
+type Query {
+  pcs(suchparameter: PcSuchparameterInput): [Pc!]
+  pc(id: ID!): Pc
+}
+
+"Funktionen, um PC-Komponenten neu anzulegen, zu aktualisieren oder zu löschen"
+type Mutation {
+  create(input: PcInput!): CreatePayload
+  update(input: PcUpdateInput!): UpdatePayload
+  delete(id: ID!): DeletePayload
+  token(username: String!, password: String!): TokenPayload
+  refresh(refreshToken: String!): TokenPayload
+}
+
+"Daten zur Spezifikation einer Komponente"
+type Spezifikation {
+  kerntaktMhz: Int
+  speicherGb: Int
+  leserateMbps: Int
+}
+
+"Datenschema zu einem Hersteller"
+type Hersteller {
+  id: ID!
+  name: String!
+  gruendungsjahr: Int
+}
+
+"Datenschema zu einer PC-Komponente, die gelesen wird"
+type Pc {
+  id: ID!
+  version: Int!
+  name: String!
+  typ: Komponententyp
+  preis: Float!
+  hersteller: Hersteller!
+  spezifikation: Spezifikation
+}
+
+"Enum-Typ für die Art einer Komponente"
+enum Komponententyp {
+  CPU
+  GPU
+  RAM
+  SSD
+}
+
+"Suchparameter für Komponenten"
+input PcSuchparameterInput {
+  name: String
+  typ: Komponententyp
+}
+
+"Daten zur Spezifikation einer neuen Komponente"
+input SpezifikationInput {
+  kerntaktMhz: Int
+  speicherGb: Int
+  leserateMbps: Int
+}
+
+"Daten für eine neue Komponente"
+input PcInput {
+  name: String!
+  typ: Komponententyp!
+  preis: Float!
+  herstellerId: Int!
+  spezifikation: SpezifikationInput!
+}
+
+"Generierte ID bei erfolgreichem Neuanlegen"
+type CreatePayload {
+  id: ID
+}
+
+"Daten für eine zu ändernde Komponente"
+input PcUpdateInput {
+  id: ID!
+  version: Int!
+  name: String!
+  typ: Komponententyp!
+  preis: Float!
+  herstellerId: Int!
+}
+
+"Neue Versionsnummer als Resultat bei erfolgreichem Aktualisieren"
+type UpdatePayload {
+  version: Int
+}
+
+"Flag, ob das Loeschen durchgefuehrt wurde"
+type DeletePayload {
+  success: Boolean
+}
+
+"Access- und Refresh-Token einschliesslich Ablauf-Zeitstempel"
+type TokenPayload {
+  [cite_start]access_token: String! [cite: 14]
+  [cite_start]expires_in: Int! [cite: 14]
+  [cite_start]refresh_token: String! [cite: 14]
+  [cite_start]refresh_expires_in: Int! [cite: 15]
+}

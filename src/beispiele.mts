@@ -8,7 +8,7 @@
 
 import { PrismaPg } from '@prisma/adapter-pg';
 import process from 'node:process';
-import { PrismaClient, type Prisma } from './generated/prisma/client.ts';
+import { PrismaClient, type Prisma } from './generated/prisma/client.js';
 
 /**
  * Typdefinition für eine Komponente inklusive der verknüpften

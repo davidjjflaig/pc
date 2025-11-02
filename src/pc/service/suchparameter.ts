@@ -11,7 +11,4 @@ export type Suchparameter = {
 };
 
 // Gueltige Namen fuer die Suchparameter
-export const suchparameterNamen = [
-    'name',
-    'typ',
-];
+export const suchparameterNamen = ['name', 'typ'];

@@ -115,8 +115,8 @@ type DeletePayload {
 
 "Access- und Refresh-Token einschliesslich Ablauf-Zeitstempel"
 type TokenPayload {
-  [cite_start]access_token: String! [cite: 14]
-  [cite_start]expires_in: Int! [cite: 14]
-  [cite_start]refresh_token: String! [cite: 14]
-  [cite_start]refresh_expires_in: Int! [cite: 15]
+  access_token: String!
+  expires_in: Int!
+  refresh_token: String!
+  refresh_expires_in: Int!
 }

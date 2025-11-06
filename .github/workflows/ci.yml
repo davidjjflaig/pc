@@ -1,0 +1,30 @@
+name: Node Continous Integration
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "23.10.0"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build ausführen
+        run: npm run build
+
+      - name: Prettier ausführen
+        run: npm run prettier
+
+      - name: ESLint ausführen
+        run: npm run eslint

@@ -1,0 +1,53 @@
+[project]
+name = "lasttest"
+version = "2025.11.1"
+description = "Lasttest für PC-Komponenten"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "GPLv3"
+license-files = ["LICENSE"]
+keywords = ["Lasttest", "Python"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Software Development :: Testing :: Traffic Generation",
+]
+dependencies = []
+
+[dependency-groups]
+dev = ["locust>=2.41.1"]
+lint = [
+  "ruff>=0.13.2",
+  "ty>=0.0.1a19",
+]
+
+[tool.ruff]
+preview = true
+
+[tool.ruff.lint]
+select = [
+  "B", "ASYNC", "S", "A", "COM", "C4", "ISC001", "PIE", "RET", "SIM", "I", "N",
+  "PERF", "E", "W", "D", "F", "PL", "UP", "FURB", "RUF",
+]
+ignore = [
+  "D203",
+  "D213",
+  "RET503",
+  "RUF012",
+  "COM812",
+]
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+
+[tool.pyright]
+pythonVersion = "3.13"
+include = ["src"]
+exclude = ["**/__pycache__"]

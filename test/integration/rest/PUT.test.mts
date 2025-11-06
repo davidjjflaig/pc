@@ -12,32 +12,53 @@ import {
 } from '../constants.mjs';
 import { getToken } from '../token.mjs';
 
-// --- Testdaten ---
+/**
+ * Testdaten
+ */
+
+/**
+ * Ein gültiges DTO (Data Transfer Object) zum Ändern einer Komponente.
+ * (Core i9-13900K wird aktualisiert)
+ */
 const geaenderteKomponente: Omit<PcDtoOhneRef, 'preis'> & { preis: number } = {
     name: 'Intel Core i9-13900K (Updated)',
     typ: 'CPU',
     preis: 750.0,
     herstellerId: 3, // Intel
 };
-const idVorhanden = '30'; // ID für Core i9-13900K
+/** ID einer existierenden Komponente (Core i9-13900K). */
+const idVorhanden = '30';
 
+/**
+ * Ein ungültiges Objekt, das zum Testen der Validierungsregeln
+ * beim Aktualisieren verwendet wird.
+ */
 const geaenderteKomponenteInvalid: Record<string, unknown> = {
     name: '?!',
     typ: 'INVALID',
     preis: -1,
     herstellerId: -1,
 };
+/** ID einer nicht-existierenden Komponente. */
 const idNichtVorhanden = '999999';
 
-// -----------------
-
+/**
+ * Testet die PUT-Anfragen für /rest/:id (Aktualisieren einer Komponente).
+ */
 describe('PUT /rest/:id', () => {
     let token: string;
 
+    /**
+     * Holt den Admin-Token vor der Ausführung der Tests.
+     */
     beforeAll(async () => {
         token = await getToken('admin', 'p');
     });
 
+    /**
+     * Testet die erfolgreiche Aktualisierung einer existierenden Komponente.
+     * Erwartet HttpStatus.NO_CONTENT.
+     */
     test('Vorhandene Komponente aendern', async () => {
         // given
         const url = `${restURL}/${idVorhanden}`;
@@ -57,6 +78,10 @@ describe('PUT /rest/:id', () => {
         expect(status).toBe(HttpStatus.NO_CONTENT);
     });
 
+    /**
+     * Testet die Aktualisierung einer Komponente mit einer nicht-existierenden ID.
+     * Erwartet HttpStatus.NOT_FOUND.
+     */
     test('Nicht-vorhandene Komponente aendern', async () => {
         // given
         const url = `${restURL}/${idNichtVorhanden}`;
@@ -76,6 +101,10 @@ describe('PUT /rest/:id', () => {
         expect(status).toBe(HttpStatus.NOT_FOUND);
     });
 
+    /**
+     * Testet die Aktualisierung mit ungültigen Validierungsdaten.
+     * Erwartet HttpStatus.BAD_REQUEST und ein Array von Fehlermeldungen.
+     */
     test('Vorhandene Komponente aendern, aber mit ungueltigen Daten', async () => {
         // given
         const url = `${restURL}/${idVorhanden}`;
@@ -102,6 +131,10 @@ describe('PUT /rest/:id', () => {
         expect(body.message).toEqual(expect.arrayContaining(expectedMsg));
     });
 
+    /**
+     * Testet die Aktualisierung ohne den erforderlichen 'If-Match'-Header (Version).
+     * Erwartet HttpStatus.PRECONDITION_REQUIRED.
+     */
     test('Vorhandene Komponente aendern, aber ohne Versionsnummer', async () => {
         // given
         const url = `${restURL}/${idVorhanden}`;
@@ -121,6 +154,4 @@ describe('PUT /rest/:id', () => {
         const body = await response.text();
         expect(body).toBe(`Header "${IF_MATCH}" fehlt`);
     });
-
-    // Weitere Tests (z.B. falscher Token) können übernommen werden
 });

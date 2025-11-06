@@ -14,7 +14,14 @@ import {
 } from '../constants.mjs';
 import { getToken } from '../token.mjs';
 
-// --- Testdaten ---
+/**
+ * Testdaten
+ */
+
+/**
+ * Ein gültiges DTO (Data Transfer Object) für eine neue Komponente,
+ * die in den Tests erstellt werden soll.
+ */
 const neueKomponente: Omit<PcDTO, 'preis'> & { preis: number } = {
     name: 'Ryzen 5 7600X',
     typ: 'CPU',
@@ -27,6 +34,10 @@ const neueKomponente: Omit<PcDTO, 'preis'> & { preis: number } = {
     },
 };
 
+/**
+ * Ein ungültiges Objekt, das zum Testen der Validierungsregeln
+ * beim Erstellen einer neuen Komponente verwendet wird.
+ */
 const neueKomponenteInvalid: Record<string, unknown> = {
     name: '?!',
     typ: 'INVALID_TYP',
@@ -35,16 +46,28 @@ const neueKomponenteInvalid: Record<string, unknown> = {
     spezifikation: {},
 };
 
+/**
+ * Definiert die erwartete Struktur einer Fehlermeldung (z. B. bei Validierungsfehlern).
+ */
 type MessageType = { message: string | string[] };
-// -----------------
 
+/**
+ * Testet die POST-Anfragen für /rest (Erstellen neuer Komponenten).
+ */
 describe('POST /rest', () => {
     let token: string;
 
+    /**
+     * Holt den Admin-Token vor der Ausführung der Tests.
+     */
     beforeAll(async () => {
         token = await getToken('admin', 'p');
     });
 
+    /**
+     * Testet das erfolgreiche Erstellen einer neuen Komponente.
+     * Erwartet HttpStatus.CREATED und einen 'Location'-Header mit der neuen ID.
+     */
     test('Neue Komponente', async () => {
         // given
         const headers = new Headers();
@@ -75,6 +98,10 @@ describe('POST /rest', () => {
         expect(PcService.ID_PATTERN.test(idStr ?? '')).toBe(true);
     });
 
+    /**
+     * Testet das Erstellen einer Komponente mit ungültigen Daten.
+     * Erwartet HttpStatus.BAD_REQUEST und ein Array von Fehlermeldungen.
+     */
     test.concurrent('Neue Komponente mit ungueltigen Daten', async () => {
         // given
         const headers = new Headers();
@@ -106,8 +133,10 @@ describe('POST /rest', () => {
         expect(messages).toEqual(expect.arrayContaining(expectedMsg));
     });
 
-    // Der 'IsbnExists'-Test wurde entfernt
-
+    /**
+     * Testet das Erstellen einer Komponente ohne Authentifizierungs-Token.
+     * Erwartet HttpStatus.UNAUTHORIZED.
+     */
     test.concurrent('Neue Komponente, aber ohne Token', async () => {
         // when
         const { status } = await fetch(restURL, {
@@ -119,6 +148,10 @@ describe('POST /rest', () => {
         expect(status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
+    /**
+     * Testet das Erstellen einer Komponente mit einem ungültigen Token.
+     * Erwartet HttpStatus.UNAUTHORIZED.
+     */
     test.concurrent('Neue Komponente, aber mit falschem Token', async () => {
         // given
         const headers = new Headers();

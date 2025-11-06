@@ -10,17 +10,24 @@ import {
 import { type Page } from '../../../src/pc/controller/page.js';
 import { CONTENT_TYPE, restURL } from '../constants.mjs';
 
-// -----------------------------------------------------------------------------
-// T e s t d a t e n
-// -----------------------------------------------------------------------------
+/**
+ * Testdaten
+ */
+/** Teil-Namen für die Suche nach existierenden Komponenten. */
 const nameArray = ['GeForce', 'Ryzen'];
+/** Teil-Namen für die Suche, die keine Ergebnisse liefern sollen. */
 const nameNichtVorhanden = ['xxx', 'yyy', 'zzz'];
+/** Komponententypen für die Suche. */
 const typen: Komponententyp[] = ['CPU', 'GPU'];
 
-// -----------------------------------------------------------------------------
-// T e s t s
-// -----------------------------------------------------------------------------
+/**
+ * Testet die GET-Anfragen für /rest (Suche und Abruf mehrerer Komponenten).
+ */
 describe('GET /rest', () => {
+    /**
+     * Testet die Abfrage aller Komponenten ohne Suchfilter.
+     * Erwartet HttpStatus.OK und eine Paginierungsstruktur (Page).
+     */
     test.concurrent('Alle Komponenten', async () => {
         // given
 
@@ -34,7 +41,6 @@ describe('GET /rest', () => {
 
         const body = (await response.json()) as Page<Komponente>;
 
-        // Korrektur: Leerzeile eingefügt
         expect(body).toBeDefined();
         body.content
             .map((pc: Komponente) => pc.id)
@@ -43,6 +49,11 @@ describe('GET /rest', () => {
             });
     });
 
+    /**
+     * Testet die Suche nach Komponenten anhand eines Teil-Namens.
+     * Erwartet HttpStatus.OK und nur Komponenten, die den Suchbegriff im Namen tragen.
+     * @param name Der zu suchende Teil-Name.
+     */
     test.concurrent.each(nameArray)(
         'Komponenten mit Teil-Name %s suchen',
         async (name) => {
@@ -60,10 +71,8 @@ describe('GET /rest', () => {
 
             const body = (await response.json()) as Page<Komponente>;
 
-            // Korrektur: Leerzeile eingefügt
             expect(body).toBeDefined();
 
-            // Korrektur: Explizite Typisierung für 'pc'
             body.content
                 .map((pc: { name: string }) => pc.name)
                 .forEach((n: string) =>
@@ -74,6 +83,11 @@ describe('GET /rest', () => {
         },
     );
 
+    /**
+     * Testet die Suche mit einem Teil-Namen, der zu keinen Ergebnissen führt.
+     * Erwartet HttpStatus.NOT_FOUND.
+     * @param name Der nicht existierende Teil-Name.
+     */
     test.concurrent.each(nameNichtVorhanden)(
         'Komponenten zu nicht vorhandenem Teil-Namen %s suchen',
         async (name) => {
@@ -89,6 +103,11 @@ describe('GET /rest', () => {
         },
     );
 
+    /**
+     * Testet die Suche nach Komponenten anhand eines spezifischen Komponententyps.
+     * Erwartet HttpStatus.OK und nur Komponenten des angefragten Typs.
+     * @param typ Der zu suchende Komponententyp.
+     */
     test.concurrent.each(typen)(
         'Mind. 1 Komponente mit Typ %s',
         async (typ) => {
@@ -106,10 +125,8 @@ describe('GET /rest', () => {
 
             const body = (await response.json()) as Page<Komponente>;
 
-            // Korrektur: Leerzeile eingefügt
             expect(body).toBeDefined();
 
-            // Korrektur: Explizite Typisierung für 'pc' und 't'
             body.content
                 .map(
                     (pc: {
@@ -123,6 +140,10 @@ describe('GET /rest', () => {
         },
     );
 
+    /**
+     * Testet die Suche mit einem ungültigen/nicht unterstützten Suchparameter.
+     * Erwartet HttpStatus.NOT_FOUND.
+     */
     test.concurrent(
         'Keine Komponenten zu einer nicht-vorhandenen Property',
         async () => {

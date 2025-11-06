@@ -3,19 +3,27 @@ import { beforeAll, describe, expect, test } from 'vitest';
 import { AUTHORIZATION, BEARER, DELETE, restURL } from '../constants.mjs';
 import { getToken } from '../token.mjs';
 
-// --- Testdaten ---
-const id = '50'; // ID der Samsung SSD
-// -----------------
+/**
+ * Testdaten
+ */
+/** ID der zu löschenden Komponente (Samsung SSD). */
+const id = '50';
 
 describe('DELETE /rest', () => {
     let token: string;
     let tokenUser: string;
 
+    /**
+     * Holt die Tokens für 'admin' und 'user' vor allen Tests.
+     */
     beforeAll(async () => {
         token = await getToken('admin', 'p');
         tokenUser = await getToken('user', 'p');
     });
 
+    /**
+     * Testet das erfolgreiche Löschen einer Komponente mit Admin-Rechten.
+     */
     test.concurrent('Vorhandene Komponente loeschen', async () => {
         // given
         const url = `${restURL}/${id}`;
@@ -32,6 +40,10 @@ describe('DELETE /rest', () => {
         expect(status).toBe(HttpStatus.NO_CONTENT);
     });
 
+    /**
+     * Testet das Löschen einer Komponente ohne Authentifizierungs-Token.
+     * Erwartet HttpStatus.UNAUTHORIZED.
+     */
     test.concurrent('Komponente loeschen, aber ohne Token', async () => {
         // given
         const url = `${restURL}/${id}`;
@@ -43,6 +55,10 @@ describe('DELETE /rest', () => {
         expect(status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
+    /**
+     * Testet das Löschen einer Komponente mit einem ungültigen Token.
+     * Erwartet HttpStatus.UNAUTHORIZED.
+     */
     test.concurrent(
         'Komponente loeschen, aber mit falschem Token',
         async () => {
@@ -62,9 +78,13 @@ describe('DELETE /rest', () => {
         },
     );
 
+    /**
+     * Testet das Löschen einer Komponente mit 'user'-Rechten.
+     * Erwartet HttpStatus.FORBIDDEN, da nur Admins löschen dürfen.
+     */
     test.concurrent('Vorhandene Komponente als "user" loeschen', async () => {
         // given
-        const url = `${restURL}/10`; // Test mit anderer ID (RTX 4080)
+        const url = `${restURL}/10`;
         const headers = new Headers();
         headers.append(AUTHORIZATION, `${BEARER} ${tokenUser}`);
 
@@ -75,7 +95,6 @@ describe('DELETE /rest', () => {
         });
 
         // then
-        // Ein 'user' darf nicht löschen, nur 'admin'
         expect(status).toBe(HttpStatus.FORBIDDEN);
     });
 });

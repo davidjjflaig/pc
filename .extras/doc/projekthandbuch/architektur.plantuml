@@ -1,21 +1,4 @@
-' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
-'
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-'
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-'
-' You should have received a copy of the GNU General Public License
-' along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-' Preview durch <Alt>d
-
-@startuml Komponenten
+@startuml PC-Komponenten-Architektur
 
 left to right direction
 
@@ -25,10 +8,11 @@ actor GraphQLClient
 node "Nest" {
   [RequestLoggerMiddleware]
 
-  [BuchController]
-  [BuchResolver]
+  [PcController]
+  [PcResolver]
 
-  [BuchService]
+  [PcService]
+  [PcWriteService]
 
   [PrismaClient]
 
@@ -48,10 +32,10 @@ cloud {
     [nodemailer]
 }
 
-database "DB buch" {
-    [Tabelle buch]
-    [Tabelle titel]
-    [Tabelle abbildung]
+database "DB pc_komponenten" {
+    [Tabelle komponente]
+    [Tabelle spezifikation]
+    [Tabelle hersteller]
 }
 
 node {
@@ -65,27 +49,27 @@ node {
 RESTClient ~~> [RequestLoggerMiddleware]
 GraphQLClient ~~> [RequestLoggerMiddleware]
 
-[RequestLoggerMiddleware] ~~> [BuchController]
-[RequestLoggerMiddleware] ~~> [BuchResolver]
+[RequestLoggerMiddleware] ~~> [PcController]
+[RequestLoggerMiddleware] ~~> [PcResolver]
 
-[BuchController] ..> [BuchService]
-[BuchResolver] ..> [BuchService]
-[BuchService] ..> [PrismaClient]
+[PcController] ..> [PcService]
+[PcWriteController] ..> [PcWriteService]
+[PcResolver] ..> [PcService]
+[PcResolver] ..> [PcWriteService]
+
+[PcService] ..> [PrismaClient]
+[PcWriteService] ..> [PrismaClient]
+[PcWriteService] ..> [MailService]
 
 [PrismaClient] ~~> [Prisma]
-[Prisma] ~~> [Tabelle buch]
-[Prisma] ~~> [Tabelle titel]
-[Prisma] ~~> [Tabelle abbildung]
+[Prisma] ~~> [Tabelle komponente]
+[Prisma] ~~> [Tabelle spezifikation]
+[Prisma] ~~> [Tabelle hersteller]
 
-[BuchController] ..> [nest-keycloak-connect]
+[PcController] ...> [nest-keycloak-connect]
+[PcResolver] ...> [nest-keycloak-connect]
 [nest-keycloak-connect] ~~> [Keycloak]
-
-[BuchService] ..> [MailService]
 [MailService] ~~> [nodemailer]
 [nodemailer] ~~> [Mailserver]
-
-[MailService] ~[hidden]~> [nest-keycloak-connect]
-
-footer (c) Jürgen Zimmermann
 
 @enduml

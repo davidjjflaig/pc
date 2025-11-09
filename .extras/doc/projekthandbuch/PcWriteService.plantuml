@@ -1,22 +1,4 @@
-' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
-'
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-'
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-'
-' You should have received a copy of the GNU General Public License
-' along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-' Preview durch <Alt>d
-
 @startuml Anwendungskern
-
 interface Promise<T>
 
 package @nestjs/common {
@@ -26,57 +8,42 @@ package @nestjs/common {
 
 package generated.prisma {
   class Prisma
-  class BuchCreateInput
-  class BuchGetPayload<T>
-  class BuchUpdateInput
-  Prisma +-- BuchCreateInput
-  Prisma +-- BuchGetPayload
-  Prisma +-- BuchUpdateInput
+  class KomponenteCreateInput
+  class KomponenteGetPayload<T>
+  class KomponenteUpdateInput
+  Prisma +-- KomponenteCreateInput
+  Prisma +-- KomponenteGetPayload
+  Prisma +-- KomponenteUpdateInput
 }
 
 package mail {
   class MailService
 }
 
-package buch {
+package pc {
   package service #DDDDDD {
     class PrismaService
-    class BuchService
-    exception IsbnExists
+    class PcService
     exception VersionInvalid
     exception VersionOutdated
 
-    class BuchWriteService << control >> <<@Injectable()>> {
-      + async create(buch: Prisma.BuchCreateInput): Promise<number>
-      + async update(id: number, buch: Prisma.BuchUpdateInput, version: string): Promise<number>
+    class PcWriteService << control >> <<@Injectable()>> {
+      + async create(pc: Prisma.KomponenteCreateInput): Promise<number>
+      + async update(id: number, pc: Prisma.KomponenteUpdateInput, version: string): Promise<number>
       + async delete(id: number): Promise<void>
     }
 
-    BuchWriteService o--> "1" PrismaService
-    BuchWriteService o--> "1" BuchService: readService
-    BuchWriteService o--> "1" MailService: mailService
-
-    BuchWriteService .up.> Injectable
-    BuchWriteService .up.> NotFoundException
-
-    BuchWriteService .up.> Promise
-
-    BuchWriteService .down.> BuchCreateInput
-    BuchWriteService .down.> BuchGetPayload
-    BuchWriteService .down.> BuchUpdateInput
-
-    BuchWriteService .down.> IsbnExists
-    BuchWriteService .down.> VersionInvalid
-    BuchWriteService .down.> VersionOutdated
-
-    BuchService .down[hidden].> MailService
-    BuchService .down[hidden].> Prisma
-    IsbnExists .left[hidden].> VersionInvalid
+    PcWriteService o--> "1" PrismaService
+    PcWriteService o--> "1" PcService: readService
+    PcWriteService o--> "1" MailService: mailService
+    PcWriteService .up.> Injectable
+    PcWriteService .up.> NotFoundException
+    PcWriteService .up.> Promise
+    PcWriteService .down.> KomponenteCreateInput
+    PcWriteService .down.> KomponenteGetPayload
+    PcWriteService .down.> KomponenteUpdateInput
+    PcWriteService .down.> VersionInvalid
+    PcWriteService .down.> VersionOutdated
   }
 }
-
-hide empty members
-
-footer (c) Jürgen Zimmermann
-
 @enduml

@@ -1,22 +1,4 @@
-' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
-'
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-'
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-'
-' You should have received a copy of the GNU General Public License
-' along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-' Preview durch <Alt>d
-
 @startuml Controller-Klasse
-
 interface Promise<T>
 interface Readonly<T>
 
@@ -25,52 +7,39 @@ package @nestjs/graphql {
   annotation UseInterceptors
   annotation Query
   annotation Args
-
-  Resolver .left[hidden].> Promise
 }
 
 package generated.prisma {
   class Prisma
-  class BuchGetPayload<T>
-  Prisma +-- BuchGetPayload
+  class KomponenteGetPayload<T>
+  Prisma +-- KomponenteGetPayload
 }
 
-package buch {
+package pc {
   package service {
-    class BuchService << control >>
+    class PcService << control >>
   }
 
   package graphql #DDDDDD {
-    class "type BuchDTO = Omit<Buch, 'abbildungen' | 'aktualisiert' | 'erzeugt'" as BuchDTO
-    hide BuchDTO circle
+    class "type PcDTO = Omit<Komponente, ...>" as PcDTO
+    hide PcDTO circle
 
     interface IdInput {
         id: number
     }
 
-    class BuchQueryResolver << control >> << @Resolver() >> << @UseInterceptors() >> {
-      + @Query() async buch(@Args() id: IdInput): Promise<Readonly<BuchGetPayload>>
-      + @Query() async buecher(@Args() titel: string | undefined): Promise<BuchDTO[]>
+    class PcQueryResolver << control >> << @Resolver() >> << @UseInterceptors() >> {
+      + @Query() async pc(@Args() id: IdInput): Promise<Readonly<KomponenteGetPayload>>
+      + @Query() async pcs(@Args() name: string | undefined): Promise<PcDTO[]>
     }
 
-    BuchQueryResolver o-down-> "1" BuchService : service
-    BuchQueryResolver ..> BuchDTO
-    BuchQueryResolver ..> IdInput
-    BuchQueryResolver .up.> Resolver
-
-    BuchQueryResolver .up.> Promise
-    BuchQueryResolver .up.> Readonly
-
-    BuchQueryResolver .up.> BuchGetPayload
-
-    IdInput .down[hidden].> BuchService
-    BuchService .down[hidden].> Prisma
-    BuchService .down[hidden].> BuchGetPayload
+    PcQueryResolver o-down-> "1" PcService : service
+    PcQueryResolver ..> PcDTO
+    PcQueryResolver ..> IdInput
+    PcQueryResolver .up.> Resolver
+    PcQueryResolver .up.> Promise
+    PcQueryResolver .up.> Readonly
+    PcQueryResolver .up.> KomponenteGetPayload
   }
 }
-
-hide empty members
-
-footer (c) Juergen Zimmermann
-
 @enduml

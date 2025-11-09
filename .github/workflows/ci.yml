@@ -1,4 +1,5 @@
-name: Node Continous Integration
+name: CI - PC-Projekt
+
 on:
   push:
     branches: [main]
@@ -6,25 +7,36 @@ on:
     branches: [main]
 
 jobs:
-  test_pull_request:
+  build-and-test:
+    name: Build & Test
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      # Installiert pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "25.0.0-rc.0"
+          node-version: "25.x"
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
-      - name: Build ausführen
-        run: npm run build
+      - name: Run Linters
+        run: |
+          pnpm run eslint
+          pnpm run prettier:check
 
-      - name: Prettier ausführen
-        run: npm run prettier
+      - name: Run Unit Tests
+        run: pnpm test:unit -- --run
 
-      - name: ESLint ausführen
-        run: npm run eslint
+      - name: Build project
+        run: pnpm build

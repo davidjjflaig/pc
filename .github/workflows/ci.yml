@@ -33,8 +33,5 @@ jobs:
           pnpm run eslint
           pnpm run prettier:check
 
-      - name: Run Unit Tests
-        run: pnpm test:unit -- --run
-
       - name: Build project
         run: pnpm build

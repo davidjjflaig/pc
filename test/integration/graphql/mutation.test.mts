@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { HttpStatus } from '@nestjs/common';
 import { beforeAll, describe, expect, test } from 'vitest';
 import {
@@ -85,15 +86,18 @@ describe('GraphQL Mutations (PC)', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
         expect(response.headers.get(CONTENT_TYPE)).toMatch(
             /application\/graphql-response\+json/iu,
         );
 
         const { data } = (await response.json()) as CreateSuccessType;
+
         expect(data).toBeDefined();
 
         const { create } = data;
+
         expect(create).toBeDefined();
         expect(parseInt(create.id, 10)).toBeGreaterThan(0);
     });
@@ -136,19 +140,24 @@ describe('GraphQL Mutations (PC)', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
+
         const { data, errors } = (await response.json()) as CreateErrorsType;
 
         expect(data.create).toBeNull();
         expect(errors).toHaveLength(1);
 
         const [error] = errors;
+
         expect(error).toBeDefined();
+
         const { message } = error!;
         const messages: string[] = message.split(',');
 
         expect(messages).toBeDefined();
         expect(messages.length).toBeGreaterThanOrEqual(expectedMsg.length);
+        // eslint-disable-next-line vitest/prefer-strict-equal
         expect(messages).toEqual(expect.arrayContaining(expectedMsg));
     });
 
@@ -186,12 +195,15 @@ describe('GraphQL Mutations (PC)', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
 
         const { data, errors } = (await response.json()) as UpdateSuccessType;
+
         expect(errors).toBeUndefined();
 
         const { update } = data;
+
         expect(update.version).toBeGreaterThanOrEqual(1);
     });
 
@@ -230,7 +242,9 @@ describe('GraphQL Mutations (PC)', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
+
         const { data, errors } = (await response.json()) as UpdateErrorsType;
 
         expect(data.update).toBeNull();
@@ -269,9 +283,11 @@ describe('GraphQL Mutations (PC)', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
 
         const { data, errors } = (await response.json()) as DeleteSuccessType;
+
         expect(errors).toBeUndefined();
         expect(data.delete.success).toBe(true);
     });
@@ -301,6 +317,7 @@ describe('GraphQL Mutations (PC)', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
 
         const { data, errors } = (await response.json()) as DeleteErrorsType;
@@ -309,10 +326,13 @@ describe('GraphQL Mutations (PC)', () => {
         expect(errors).toBeDefined();
 
         const [error] = errors!;
+
         expect(error).toBeDefined();
 
         const { message, extensions } = error!;
+
         expect(message).toBe('Forbidden resource');
         expect(extensions.code).toBe('BAD_USER_INPUT');
     });
 });
+/* eslint-enable @typescript-eslint/no-non-null-assertion */

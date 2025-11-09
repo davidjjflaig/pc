@@ -127,7 +127,10 @@ describe('PUT /rest/:id', () => {
 
         // then
         expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+
         const body = (await response.json()) as { message: string[] };
+
+        // eslint-disable-next-line vitest/prefer-strict-equal
         expect(body.message).toEqual(expect.arrayContaining(expectedMsg));
     });
 
@@ -151,7 +154,9 @@ describe('PUT /rest/:id', () => {
 
         // then
         expect(response.status).toBe(HttpStatus.PRECONDITION_REQUIRED);
+
         const body = await response.text();
+
         expect(body).toBe(`Header "${IF_MATCH}" fehlt`);
     });
 });

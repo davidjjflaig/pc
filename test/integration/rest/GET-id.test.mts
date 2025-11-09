@@ -36,6 +36,7 @@ describe('GET /rest/:id', () => {
         expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
         const body = (await response.json()) as { id: number };
+
         expect(body.id).toBe(id);
     });
 
@@ -89,7 +90,9 @@ describe('GET /rest/:id', () => {
 
             // then
             expect(status).toBe(HttpStatus.NOT_MODIFIED);
+
             const body = await response.text();
+
             expect(body).toBe('');
         },
     );

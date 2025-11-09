@@ -83,16 +83,20 @@ describe('POST /rest', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.CREATED);
 
         const responseHeaders = response.headers;
         const location = responseHeaders.get(LOCATION);
+
         expect(location).toBeDefined();
 
         const indexLastSlash = location?.lastIndexOf('/') ?? -1;
+
         expect(indexLastSlash).not.toBe(-1);
 
         const idStr = location?.slice(indexLastSlash + 1);
+
         expect(idStr).toBeDefined();
         // Prüft, ob die zurückgegebene ID eine gültige Zahl ist
         expect(PcService.ID_PATTERN.test(idStr ?? '')).toBe(true);
@@ -124,12 +128,14 @@ describe('POST /rest', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.BAD_REQUEST);
 
         const body = (await response.json()) as MessageType;
         const messages = body.message;
 
         expect(messages).toBeDefined();
+        // eslint-disable-next-line vitest/prefer-strict-equal
         expect(messages).toEqual(expect.arrayContaining(expectedMsg));
     });
 

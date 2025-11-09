@@ -118,13 +118,16 @@ describe('GraphQL Queries (PC)', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
+
         const { data, errors } = (await response.json()) as PcSuccessType;
 
         expect(errors).toBeUndefined();
         expect(data).toBeDefined();
 
         const { pc } = data;
+
         expect(pc.name).toBeDefined();
         expect(pc.version).toBeGreaterThanOrEqual(0);
         expect(pc.hersteller.name).toBeDefined();
@@ -151,6 +154,7 @@ describe('GraphQL Queries (PC)', () => {
             body: JSON.stringify(query),
         });
         const { data, errors } = (await response.json()) as PcErrorsType;
+
         expect(data.pc).toBeNull();
         expect(errors).toHaveLength(1);
         expect(errors[0]!.message).toBe(
@@ -190,16 +194,20 @@ describe('GraphQL Queries (PC)', () => {
 
             // then
             const { status } = response;
+
             expect(status).toBe(HttpStatus.OK);
+
             const { data, errors } = (await response.json()) as PcsSuccessType;
 
             expect(errors).toBeUndefined();
             expect(data).toBeDefined();
 
             const { pcs } = data;
+
             expect(pcs).not.toHaveLength(0);
 
             pcs.forEach((pc) => {
+                // eslint-disable-next-line vitest/prefer-strict-equal
                 expect(pc.name.toLowerCase()).toEqual(
                     expect.stringContaining(name.toLowerCase()),
                 );
@@ -231,6 +239,7 @@ describe('GraphQL Queries (PC)', () => {
                 body: JSON.stringify(query),
             });
             const { data, errors } = (await response.json()) as PcsErrorsType;
+
             expect(data.pcs).toBeNull();
             expect(errors).toHaveLength(1);
             expect(errors[0]!.message).toMatch(/^Keine Komponenten gefunden:/u);
@@ -266,6 +275,7 @@ describe('GraphQL Queries (PC)', () => {
 
         // then
         const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
 
         const { data, errors } = (await response.json()) as {
@@ -277,6 +287,7 @@ describe('GraphQL Queries (PC)', () => {
         expect(data).toBeDefined();
 
         const { pcs } = data;
+
         expect(pcs).not.toHaveLength(0);
 
         pcs.forEach((pc) => {

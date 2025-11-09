@@ -1,7 +1,6 @@
 // @ts-check
 import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
 import eslint from '@eslint/js';
-import { defineConfig } from 'eslint/config';
 import graphql from '@graphql-eslint/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
 import vitest from '@vitest/eslint-plugin';
@@ -14,6 +13,7 @@ import regexp from 'eslint-plugin-regexp';
 import security from 'eslint-plugin-security';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -519,6 +519,16 @@ export default defineConfig(
             '@graphql-eslint/description-style': ['error', { style: 'inline' }],
             '@graphql-eslint/no-scalar-result-type-on-mutation': 'error',
             '@graphql-eslint/strict-id-in-types': 'off',
+            '@graphql-eslint/naming-convention': [
+                'error',
+                {
+                    FieldDefinition: {
+                        style: 'camelCase',
+                        ignorePattern:
+                            '^(access_token|expires_in|refresh_token|refresh_expires_in)$',
+                    },
+                },
+            ],
         },
     },
 
@@ -607,9 +617,9 @@ export default defineConfig(
         extends: [packageJson.configs.recommended],
         rules: {
             'package-json/sort-collections': [
-		        'error',
-		        ['dependencies', 'devDependencies']
-	        ]
-        }
+                'error',
+                ['dependencies', 'devDependencies'],
+            ],
+        },
     },
 );

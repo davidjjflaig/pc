@@ -42,6 +42,7 @@ describe('GET /rest', () => {
         const body = (await response.json()) as Page<Komponente>;
 
         expect(body).toBeDefined();
+
         body.content
             .map((pc: Komponente) => pc.id)
             .forEach((id) => {

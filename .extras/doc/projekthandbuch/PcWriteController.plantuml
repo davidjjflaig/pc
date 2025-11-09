@@ -1,0 +1,55 @@
+@startuml Controller-Klasse
+interface Promise<T>
+
+package @nestjs/common {
+  annotation Controller
+  annotation UseGuards
+  annotation UseInterceptors
+  annotation Post
+  annotation Put
+  annotation Delete
+  annotation Req
+  annotation Res
+  annotation Param
+  annotation Body
+  annotation Headers
+}
+
+package nest-keycloak-connect {
+  class AuthGuard
+  annotation Roles
+}
+
+package express {
+  class Request
+  class Response
+}
+
+package pc {
+  package service {
+    class PcWriteService << control >>
+  }
+
+  package rest #DDDDDD {
+    class PcDtoOhneRef << entity >>
+    class PcDTO << entity >>
+    PcDtoOhneRef <|-- PcDTO
+
+    class PcWriteController << control >> << @Controller() >> << @UseGuards() >> << @UseInterceptors() >> {
+      + @Post() @Roles() async post(@Body() pc: PcDTO, @Req() req: Request,  @Res() res: Response): Promise<Response>
+      + @Put() @Roles() async put(@Body() pc: PcDtoOhneRef, @Param() id: number, @Headers() version: string, @Res() res: Response): Promise<Response>
+      + @Delete() @Roles() async delete(@Param() id: number, @Res() res: Response): Promise<Response>
+    }
+
+    PcWriteController o--> "1" PcWriteService : service
+    PcWriteController ..> PcDTO
+    PcWriteController ..> PcDtoOhneRef
+    PcWriteController .up.> Controller
+    PcWriteController .up.> AuthGuard
+    PcWriteController .up.> Roles
+    PcWriteController .up.> Request
+    PcWriteController ..> Response
+    PcWriteController .up.> Promise
+  }
+}
+@enduml

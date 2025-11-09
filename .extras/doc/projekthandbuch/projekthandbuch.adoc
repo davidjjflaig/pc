@@ -1,22 +1,5 @@
-// Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-// Preview durch <Strg><Shift>v
-
 = Projekthandbuch
-Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
+David Flaig <flda1012@h-ka.de>
 :doctype: book
 :toc: left
 :sectanchors:
@@ -24,118 +7,63 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 :sectnums:
 :source-highlighter: highlight.js
 :icons: font
-// :kroki-server-url: https://kroki.io
 
-// https://github.com/asciidoctor/asciidoctorj
-// https://github.com/asciidoctor/asciidoctor-diagram
-// http://de.plantuml.com/classes.html
-// http://de.plantuml.com/component.html
-// https://github.com/odrotbohm/asciidoctor-plantuml
+== Architektur
 
-IMPORTANT: Copyright (C) 2020 - present Jürgen Zimmermann, Hochschule Karlsruhe. +
-           Free use of this software is granted under the terms of the
-           GNU General Public License (GPL) v3. +
-           For the full text of the license, see the http://www.gnu.org/licenses/gpl-3.0.html[license] file.
-
-== Der Applikationsserver
-
-=== Der Applikationsserver im Überblick
-
-Sed porttitor lectus nibh. Nulla porttitor accumsan tincidunt.
-
-.Use Cases
-[plantuml,use-cases,svg]
+.Komponenten-Diagramm
+[plantuml,architektur,svg]
 ----
-include::use-cases.plantuml[]
+include::architektur.plantuml[]
 ----
 
-Quisque velit nisi, pretium ut lacinia in, elementum id enim. Nulla porttitor
-accumsan tincidunt.
+=== Controller
 
-.Komponentendiagramm
-[plantuml,komponenten,svg]
+.\"PcController\" (Lesen)
+[plantuml,PcController,svg]
 ----
-include::komponenten.plantuml[]
-----
-
-=== Die REST-Schnittstelle
-
-Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
-Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet
-ligula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
-cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit
-amet ligula.
-
-."BuchController" für Lesezugriffe an der REST-Schnittstelle
-[plantuml,BuchController,svg]
-----
-include::BuchController.plantuml[]
+include::PcController.plantuml[]
 ----
 
-Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec
-sollicitudin molestie malesuada.
-
-."Sequenzdiagramm" mit den Methodenaufrufen
-[plantuml,sequenzdiagramm,svg]
+.\"PcWriteController\" (Schreiben)
+[plantuml,PcWriteController,svg]
 ----
-include::sequenzdiagramm.plantuml[]
+include::PcWriteController.plantuml[]
 ----
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-tempor invidunt ut.
+=== GraphQL Resolver
 
-."BuchWriteController" für Schreibzugriffe an der REST-Schnittstelle
-[plantuml,BuchGetController,svg]
+.\"PcQueryResolver\" (Lesen)
+[plantuml,PcQueryResolver,svg]
 ----
-include::BuchWriteController.plantuml[]
-----
-
-=== Die GraphQL-Schnittstelle
-
-Donec sollicitudin molestie malesuada. Donec rutrum congue leo eget malesuada.
-
-.BuchQueryResolver für Lesezugriffe an der GraphQL-Schnittstelle
-[plantuml,BuchQueryResolver,svg]
-----
-include::BuchQueryResolver.plantuml[]
+include::PcQueryResolver.plantuml[]
 ----
 
-Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a
-pellentesque nec, egestas non nisi.
-
-.BuchMutationResolver für Schreibzugriffe an der GraphQL-Schnittstelle
-[plantuml,BuchMutationResolver,svg]
+.\"PcMutationResolver\" (Schreiben)
+[plantuml,PcMutationResolver,svg]
 ----
-include::BuchMutationResolver.plantuml[]
+include::PcMutationResolver.plantuml[]
 ----
 
-=== Die Geschäftslogik
+=== Geschäftslogik (Services)
 
-Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada.
-
-."BuchService" von der Geschäftslogik
-[plantuml,BuchService,svg]
+.\"PcService\" (Lesen)
+[plantuml,PcService,svg]
 ----
-include::BuchService.plantuml[]
+include::PcService.plantuml[]
 ----
 
-Pellentesque in ipsum id orci porta dapibus. Donec rutrum congue leo eget
-malesuada.
-
-."BuchWriteService" von der Geschäftslogik
-[plantuml,BuchWriteService,svg]
+.\"PcWriteService\" (Schreiben)
+[plantuml,PcWriteService,svg]
 ----
-include::BuchWriteService.plantuml[]
+include::PcWriteService.plantuml[]
 ----
 
 === ER-Diagramm
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
 .ER-Diagramm
-[plantuml,ER-Diagramm,svg]
+[plantuml,ER-Diagramm_PC_Komponenten,svg]
 ----
-include::ER-Diagramm.plantuml[]
+include::ER-Diagramm_PC_Komponenten.plantuml[]
 ----
 
 == Programmierrichtlinien für TypeScript und JavaScript

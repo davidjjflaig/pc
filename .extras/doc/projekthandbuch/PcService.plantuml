@@ -1,0 +1,38 @@
+@startuml Anwendungskern
+interface Promise<T>
+interface Readonly<T>
+
+package @nestjs/common {
+  annotation Injectable
+  exception NotFoundException
+}
+
+package generated.prisma {
+  class PrismaClient
+  class KomponenteGetPayload<T>
+  Prisma +-- KomponenteGetPayload
+}
+
+package pc {
+  package service #DDDDDD {
+    class PrismaService
+    class WhereBuilder
+    class Slice
+
+    class PcService << control >> <<@Injectable()>> {
+      + async findById(id: number): Promise<Readonly<Prisma.KomponenteGetPayload<>>>
+      + async find(suchparameter?: Record<string, any>): Promise<Readonly<Slice<KomponenteGetPayload>>>
+    }
+
+    PcService o--> "1" WhereBuilder: whereBuilder
+    PcService o--> "1" PrismaClient: prisma
+    PcService .up.> Injectable
+    PcService .up.> NotFoundException
+    PcService .up.> Promise
+    PcService .up.> Readonly
+    PcService ..> PrismaService
+    PcService ..> KomponenteGetPayload
+    PcService ..> Slice
+  }
+}
+@enduml

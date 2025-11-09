@@ -1,6 +1,3 @@
-// Copyright (C) 2024 DEIN NAME, Hochschule Karlsruhe
-// Angepasst von der Vorlage von Juergen Zimmermann
-
 /**
  * Das Modul besteht aus den DTO-Klassen für eine PC-Komponente.
  * @packageDocumentation

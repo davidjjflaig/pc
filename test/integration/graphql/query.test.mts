@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { type GraphQLRequest } from '@apollo/server';
 import { HttpStatus } from '@nestjs/common';
 import { beforeAll, describe, expect, test } from 'vitest';
@@ -284,3 +285,4 @@ describe('GraphQL Queries (PC)', () => {
         });
     });
 });
+/* eslint-enable @typescript-eslint/no-non-null-assertion */

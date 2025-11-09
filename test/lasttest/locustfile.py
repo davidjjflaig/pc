@@ -31,7 +31,7 @@ class PcRequests(HttpUser):
     @task(200)
     def get_name(self) -> None:
         """GET-Requests mit Query-Parameter: Teilstring des Namens."""
-        name_list = ["GeForce", "Ryzen", "Core", "Samsung"]
+        name_list = ["GeForce", "Ryzen", "Core"]
         for teil in name_list:
             self.client.get("/rest", params={"name": teil})
 

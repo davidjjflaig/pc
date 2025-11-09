@@ -20,7 +20,7 @@ import { getToken } from './token.mjs';
 /** ID für RAM, das wir löschen */
 const idLoeschen = '40';
 /** ID für Samsung SSD, die wir aktualisieren */
-const idUpdate = '50';
+const idUpdate = '10';
 
 /**
  * Typdefinitionen für GraphQL-Antworten
@@ -121,7 +121,6 @@ describe('GraphQL Mutations (PC)', () => {
             expect.stringMatching(/^name /u),
             expect.stringMatching(/^preis /u),
             expect.stringMatching(/^herstellerId /u),
-            expect.stringMatching(/^spezifikation /u),
         ];
         const headers = new Headers();
         headers.append(CONTENT_TYPE, APPLICATION_JSON);

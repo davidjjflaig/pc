@@ -32,23 +32,5 @@ jobs:
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-          VALIDATE_ENV: true
-          VALIDATE_GITHUB_ACTIONS: true
-          VALIDATE_GIT_MERGE_CONFLICT_MARKERS: true
-          VALIDATE_GRAPHQL_PRETTIER: true
-
-          VALIDATE_JSON_PRETTIER: true
-          VALIDATE_MARKDOWN: true
-          VALIDATE_MARKDOWN_PRETTIER: true
-          VALIDATE_PYTHON_BLACK: true
-          VALIDATE_PYTHON_PYLINT: true
-          VALIDATE_PYTHON_FLAKE8: true
-          VALIDATE_PYTHON_ISORT: true
-          VALIDATE_PYTHON_MYPY: true
-          VALIDATE_PYTHON_PYINK: true
-          VALIDATE_PYTHON_RUFF: true
-          VALIDATE_TYPESCRIPT_PRETTIER: true
-          VALIDATE_XML: true
-          VALIDATE_YAML: true
-          VALIDATE_YAML_PRETTIER: true
+          VALIDATE_ALL_CODEBASE: true
+          DEFAULT_BRANCH: main
